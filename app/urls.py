@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^$', views.search, name='search'),
+    #url(r'^search/(?P<query>\w+)/$', views.search, name='search'),
     #^^ coba buat dapetin query
 ]
