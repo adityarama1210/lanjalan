@@ -8,4 +8,4 @@ def index(request):
 
 
 def search(request, query):
-	return HttpResponse("waodkwa") 
+	# to do implement this
