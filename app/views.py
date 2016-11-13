@@ -7,5 +7,6 @@ def index(request):
 	return render(request, 'views/index.html', {})
 
 
-def search(request, query):
-	# to do implement this
+def search(request):
+	query = request.GET.get('query','')
+	return HttpResponse(query)
