@@ -10,4 +10,7 @@ class HomeController extends Controller
     public function index(){
     	return 'index';
     }
+    public function search(Request $request){
+    	
+    }
 }

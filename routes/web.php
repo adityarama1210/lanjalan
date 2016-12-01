@@ -12,3 +12,4 @@
 */
 
 Route::get('/','HomeController@index')->name('index');
+Route::get('/search','HomeController@search')->name('search');
