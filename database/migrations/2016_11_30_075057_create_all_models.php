@@ -23,17 +23,16 @@ class CreateAllModels extends Migration
         Schema::create('words', function (Blueprint $table) {
             $table->increments('id');
             $table->string('word');
+            $table->unique('word');
+            $table->float('idf', 7, 2);
         });
         Schema::create('document_words', function (Blueprint $table) {
-            $table->increments('doc_id');
+            $table->integer('package_id')->unsigned();
             $table->integer('word_id')->unsigned();
             $table->float('weight', 7, 2);
             $table->foreign('word_id')->references('id')->on('words')->onDelete('cascade');
-        });
-        Schema::create('idfs', function (Blueprint $table) {
-            $table->integer('word_id')->unsigned();
-            $table->float('idf', 7, 2);
-            $table->foreign('word_id')->references('id')->on('words')->onDelete('cascade');
+            $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
+            $table->primary(['package_id','word_id']);
         });
     }
 

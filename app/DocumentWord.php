@@ -8,6 +8,6 @@ class DocumentWord extends Model
 {
     //
     protected $table = 'document_words';
-    protected $fillabel = ['doc_id','word_id','weight'];
+    protected $fillabel = ['package_id','word_id','weight'];
     public $timestamps = false;
 }

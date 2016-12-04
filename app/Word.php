@@ -8,6 +8,6 @@ class Word extends Model
 {
     //
     protected $table = 'words';
-    protected $fillabel = ['word'];
+    protected $fillabel = ['word','idf'];
     public $timestamps = false;
 }
