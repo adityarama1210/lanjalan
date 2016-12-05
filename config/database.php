@@ -58,7 +58,7 @@ return [
             'port' => '3306',
             'database' => 'lanjalan',
             'username' => 'root',
-            'password' => '',
+            'password' => 'whiskeyhotel',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
