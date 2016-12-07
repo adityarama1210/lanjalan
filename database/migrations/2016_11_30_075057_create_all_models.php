@@ -44,9 +44,8 @@ class CreateAllModels extends Migration
     public function down()
     {
         //
-        Schema::drop('packages');
         Schema::drop('document_words');
         Schema::drop('words');
-        Schema::drop('idfs');
+        Schema::drop('packages');
     }
 }
