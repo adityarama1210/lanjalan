@@ -10,17 +10,17 @@ use DB;
 
 class HomeController extends Controller
 {
-    //
     public function index(){
-    	return view('index');
+    	return view('index', ['search' => false]);
     }
+
     public function search(Request $request){
     	$query = $request->input('query');
         if(!$query){
             return redirect()->route('index');
         }
-    	$arr = explode(" ", strtolower($query));
-    	$arr = array_count_values($arr);
+        $arr = explode(" ", strtolower($query));
+        $arr = array_count_values($arr);
         $arr_of_query = [];
         $query_weight = 0.0;
         $arr_of_word = array_keys($arr);
@@ -54,10 +54,10 @@ class HomeController extends Controller
             foreach($arr_of_similarity as $package_id => $relevance_value){
                 array_push($arr, Package::find($package_id));
             }
-            return $arr;
+            return view('index', ['search' => true, 'data' => $arr, 'error' => false]);
         }
         else{
-            return redirect()->back()->with('error','No Result Found');
+            return view('index', ['search' => true, 'data' => [], 'error' => true]);
         }
     	/*foreach($arr as $w => $freq){
 
@@ -65,7 +65,7 @@ class HomeController extends Controller
                 $idf = $word->idf;
                 $arr_of_query[$w] = $freq * $idf;
             }
-    	}*/
+        }*/
     	//return view('index');
     }
 }
