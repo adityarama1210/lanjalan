@@ -21,7 +21,7 @@ class HomeController extends Controller
         }
         $arr = explode(" ", strtolower($query));
         $arr = array_count_values($arr);
-        $arr_of_query = [];
+        /*$arr_of_query = [];
         $query_weight = 0.0;
         $arr_of_word = array_keys($arr);
         $words = DB::table('words')->whereIn('word', $arr_of_word)->get();
@@ -29,10 +29,11 @@ class HomeController extends Controller
         for($i = 0 ; $i < count($words) ; $i++){
             $words_id[$i] = $words[$i]->id;
         }
-        $document_words = DB::table('document_words')->whereIn('word_id',$words_id)->orderBy('package_id')->get();
-        $arr_of_similarity = [];
+        $document_words = DB::table('document_words')->whereIn('word_id',$words_id)->orderBy('package_id')->get();*/
+        $document_words = $this->get_document_words($arr);
         if(count($document_words) > 0){
-            foreach($document_words as $document_word){
+            $arr_of_similarity = [];
+            /*foreach($document_words as $document_word){
                 $w = Word::find($document_word->word_id);
                 if(array_key_exists($document_word->package_id, $arr_of_similarity)){
                     $result = $arr_of_similarity[$document_word->package_id];
@@ -49,7 +50,8 @@ class HomeController extends Controller
                     return 1;
                 else
                     return $b - $a;
-            });
+            });*/
+            $arr_of_similarity = $this->get_array_of_similarity($document_words, $arr_of_similarity, $arr);
             $arr = [];
             foreach($arr_of_similarity as $package_id => $relevance_value){
                 array_push($arr, Package::find($package_id));
@@ -67,5 +69,38 @@ class HomeController extends Controller
             }
         }*/
     	//return view('index');
+    }
+    private function get_document_words($arr){
+        $arr_of_query = [];
+        $query_weight = 0.0;
+        $arr_of_word = array_keys($arr);
+        $words = DB::table('words')->whereIn('word', $arr_of_word)->get();
+        $words_id = [];
+        for($i = 0 ; $i < count($words) ; $i++){
+            $words_id[$i] = $words[$i]->id;
+        }
+        $document_words = DB::table('document_words')->whereIn('word_id',$words_id)->orderBy('package_id')->get();
+        return $document_words;
+    }
+    private function get_array_of_similarity($document_words, $arr_of_similarity, $arr){
+        foreach($document_words as $document_word){
+            $w = Word::find($document_word->word_id);
+            if(array_key_exists($document_word->package_id, $arr_of_similarity)){
+                $result = $arr_of_similarity[$document_word->package_id];
+                $result += ($document_word->weight * $w->idf * $arr[$w->word]);
+            }
+            else{
+                $w = Word::find($document_word->word_id);
+                $result = ($document_word->weight * $w->idf * $arr[$w->word]);
+            }
+            $arr_of_similarity[$document_word->package_id] = $result;
+        }
+        uasort($arr_of_similarity, function($a, $b){
+            if($a == $b)
+                return 1;
+            else
+                return $b - $a;
+        });
+        return $arr_of_similarity;
     }
 }
