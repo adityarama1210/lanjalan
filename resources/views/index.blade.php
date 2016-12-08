@@ -1,33 +1,46 @@
 @extends('layout.base')
 
-@section('header')
-<section class="center">
-	<div class="slogan">
-		UNFORGETABLE TRAVELING EXPERIENCE
-	</div>
-	<div class="secondary-slogan">
-		Search our best travel package now!
-	</div>
-	<div class="searchbar">
-		<form action="{{ route('search') }}" method="GET">
-			@if(session('error'))
-			<h4>{{ session('error') }}</h4>
-			@endif
-			<div class="form-group">
-				<input type="text" name="query" id="query" class="form-control form-control-white" placeholder="Liburan ke Bali bulan Februari" required>
-			</div>
-			<input type="submit" class="btn btn-o-white" value="Search">
-		</form>
-	</div>
-</section>
-<section class="bottom">
-	<a id="scrollToContent" href="#">
-		<img src="{{ asset('images/arrow_down.png') }}">
-	</a>
-</section>
-@endsection
-
 @section('body')
+<div id="home">
+	<div id="header" class="content-block header-wrapper-image">
+		<div class="header-wrapper-inner">
+			<section class="top clearfix">
+				<div class="pull-left">
+					<h1><a class="logo" href="/">Lanjalan</a></h1>
+				</div>
+				<div class="pull-right">
+					<a class="toggleDrawer" href="#"><i class="fa fa-bars fa-2x"></i></a>
+				</div>
+			</section>
+			<section class="center">
+				<div class="slogan">
+					UNFORGETABLE TRAVELING EXPERIENCE
+				</div>
+				<div class="secondary-slogan">
+					Search our best travel package now!
+				</div>
+				<div class="searchbar">
+					<form action="{{ route('search') }}" method="GET">
+						@if(session('error'))
+						<h4>{{ session('error') }}</h4>
+						@endif
+						<div class="form-group">
+							<input type="text" name="query" id="query" class="form-control form-control-white" placeholder="Liburan ke Bali bulan Februari" required>
+						</div>
+						<input type="submit" class="btn btn-o-white" value="Search">
+					</form>
+				</div>
+			</section>
+			<section class="bottom">
+				<a id="scrollToContent" href="#">
+					<img src="{{ asset('images/arrow_down.png') }}">
+				</a>
+			</section>
+		</div>
+	</div>
+</div>
+
+
 @if($search)
 <div class="content-block" id="search-result">
 	<div class="container">
@@ -43,7 +56,7 @@
 				@else
 				@foreach($data as $package)
 				<div class="col-sm-4 travel-package">
-					<a href="#" class="recent-work imagelink" style="background-image:url(http://placehold.it/300x300&text=TravelPackage{{ $package->id }})">
+					<a href="/package/{{ $package->id }}" class="recent-work imagelink" style="background-image:url({{ $randomimage[0] }})">
 						<span class="btn btn-o-white imagename">PESAN</span>
 					</a>
 					<span class="price">Starts from Rp. {{ explode(' - ', $package->price)[0] }}</span>

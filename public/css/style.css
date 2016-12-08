@@ -76,7 +76,7 @@ a:hover {
 }
 
 
-h1, h2, h3, h4, h5, h6{		
+h1, h2, h3, h4, h5, h6{
 	margin: 0 0 15px 0;	
 	color: #3A4F52;
 	font-family: 'Alegreya Sans';
@@ -111,7 +111,7 @@ h1, h2, h3, h4, h5, h6{
 	padding: 0 !important;
 }
 
-#header.header-wrapper {
+#header.header-wrapper-image {
 	background: url(../images/header-bg.jpg) no-repeat center center;
 	background-size: cover;
 	display: table;
@@ -123,14 +123,14 @@ h1, h2, h3, h4, h5, h6{
 }
 
 @media screen and (max-width: 767px) and (orientation: landscape) {
-	#header.header-wrapper {
+	#header.header-wrapper-image {
 		height: auto;
 		min-height: 100vh;
 		padding: 0px; 
 	} 
 }
 
-#header.header-wrapper .header-wrapper-inner {
+#header.header-wrapper-image .header-wrapper-inner {
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle; 
@@ -506,4 +506,54 @@ h1, h2, h3, h4, h5, h6{
 
 .travel-package .imagelink {
 	max-width: 100%;
+}
+
+#header.header-wrapper {
+	background: #475B6F;
+	background-size: cover;
+	display: table;
+	height: 100vh;
+	width: 100%;
+	position: relative;
+	z-index: 1;
+	overflow-x: hidden; 
+}
+
+@media screen and (max-width: 767px) and (orientation: landscape) {
+	#header.header-wrapper {
+		height: auto;
+		min-height: 100vh;
+		padding: 0px; 
+	} 
+}
+
+#header.header-wrapper .header-wrapper-inner {
+	display: table-cell;
+}
+
+.package-detail {
+	margin: 100px auto;
+}
+
+.package-detail .name {
+	text-align: center;
+	font-size: 2.5em;
+	margin-bottom: 15px;
+	line-height: 1em;
+	font-family: 'Nixie One';
+	color: white;
+}
+
+.package-detail .image {
+	margin-top: 40px;
+}
+
+.package-detail .description h3 {
+	color: white;
+}
+
+.package-detail .description p {
+	font-size: 1em;
+	line-height: 1em;
+	color: white;
 }
