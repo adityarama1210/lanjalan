@@ -13,3 +13,4 @@
 
 Route::get('/','HomeController@index')->name('index');
 Route::get('/search','HomeController@search')->name('search');
+Route::get('/package/{id}', 'HomeController@package');

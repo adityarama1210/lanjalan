@@ -37,22 +37,22 @@
 		<nav>
 			<ul class="nav nav-pills nav-stacked">
 				<li>
-					<a href="#wrapper"><i class="fa fa-home"></i> Home</a>
+					<a href="/#home"><i class="fa fa-home"></i> Home</a>
 				</li>
 				<li>
-					<a href="#services"><i class="fa fa-tasks"></i> Services</a>
+					<a href="/#services"><i class="fa fa-tasks"></i> Services</a>
 				</li>
 				<li>
-					<a href="#blog"><i class="fa fa-wordpress"></i> Blog</a>
+					<a href="/#blog"><i class="fa fa-wordpress"></i> Blog</a>
 				</li>
 				<li>
-					<a href="#parallax"><i class="fa fa-heart"></i> Parallax</a>
+					<a href="/#parallax"><i class="fa fa-heart"></i> Parallax</a>
 				</li>
 				<li>
-					<a href="#testimonials"><i class="fa fa-thumbs-up"></i> Testimonials</a>
+					<a href="/#testimonials"><i class="fa fa-thumbs-up"></i> Testimonials</a>
 				</li>
 				<li>
-					<a href="#contact"><i class="fa fa-phone-square"></i> Contact</a>
+					<a href="/#contact"><i class="fa fa-phone-square"></i> Contact</a>
 				</li>
 			</ul>
 		</nav>
@@ -68,20 +68,6 @@
 	</div>
 
 	<div id="wrapper">
-		<div id="header" class="content-block header-wrapper">
-			<div class="header-wrapper-inner">
-				<section class="top clearfix">
-					<div class="pull-left">
-						<h1><a class="logo" href="/">Lanjalan</a></h1>
-					</div>
-					<div class="pull-right">
-						<a class="toggleDrawer" href="#"><i class="fa fa-bars fa-2x"></i></a>
-					</div>
-				</section>
-				@yield('header')
-			</div>
-		</div>
-		
 		@yield('body')
 	</div>
 

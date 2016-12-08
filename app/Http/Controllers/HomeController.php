@@ -68,4 +68,10 @@ class HomeController extends Controller
         }*/
     	//return view('index');
     }
+
+    public function package(Request $request, $id) {
+        $package = Package::find($id);
+        $payload = ['data' => $package, 'randomimage' => 'http://placehold.it/300x300'];
+        return view('package', $payload);
+    }
 }

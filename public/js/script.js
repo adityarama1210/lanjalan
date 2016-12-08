@@ -65,9 +65,7 @@
 
 	function setSlideNav(){
 		jQuery(".toggleDrawer").click(function(e){
-			//alert($wrapper.css('marginRight'));
 			e.preventDefault();
-			console.log('wkwk');
 
 			if($wrapper.css('marginLeft')=='0px'){
 				$drawerRight.animate({marginRight : 0},200);
@@ -123,8 +121,12 @@
 	});
 
 	jQuery('nav > ul > li > a').click(function(e){
-		e.preventDefault();
-		jQuery.scrollTo(jQuery(this).attr('href'), 400, { offset:-(jQuery('#header .top').height()), axis:'y' });
+		var href = jQuery(this).attr('href');
+		if (window.location.pathname == "/") {
+			e.preventDefault();
+			window.location.hash = "";
+			jQuery.scrollTo(href.substr(1), 400, { offset:-(jQuery('#header .top').height()), axis:'y' });
+		}
 	})
 
 	jQuery(window).scroll( function() {
