@@ -128,9 +128,12 @@
 	});
 
 	if(window.location.hash) {
-		var onepagehash = window.location.hash.substr(1);
 		setTimeout(function(){
-			jQuery.scrollTo('#' + onepagehash, 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
+			jQuery.scrollTo(window.location.hash, 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
+		}, 500);
+	} else if(window.location.pathname == "/search") {
+		setTimeout(function(){
+			jQuery.scrollTo("#search-result", 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
 		}, 500);
 	}
 })();
