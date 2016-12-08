@@ -56,7 +56,7 @@
 				@else
 				@foreach($data as $package)
 				<div class="col-sm-4 travel-package">
-					<a href="/package/{{ $package->id }}" class="recent-work imagelink" style="background-image:url(http://placehold.it/300x300&text=TravelPackage{{ $package->id }})">
+					<a href="/package/{{ $package->id }}" class="recent-work imagelink" style="background-image:url({{ $randomimage[0] }})">
 						<span class="btn btn-o-white imagename">PESAN</span>
 					</a>
 					<span class="price">Starts from Rp. {{ explode(' - ', $package->price)[0] }}</span>

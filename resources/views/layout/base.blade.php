@@ -37,7 +37,11 @@
 		<nav>
 			<ul class="nav nav-pills nav-stacked">
 				<li>
+					@if(Request::path() == '/')
 					<a href="/#home"><i class="fa fa-home"></i> Home</a>
+					@else
+					<a href="/"><i class="fa fa-home"></i> Home</a>
+					@endif
 				</li>
 				<li>
 					<a href="/#services"><i class="fa fa-tasks"></i> Services</a>

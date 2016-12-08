@@ -21,7 +21,7 @@
 				<br/>
 				<div class="row">
 					<div class="col col-sm-4 image">
-						<img src="{{ $randomimage }}" alt="{{ $data->name }}"/>
+						<img src="{{ $randomimage[0] }}" alt="{{ $data->name }}"/>
 					</div>
 					<div class="col col-sm-8 description">
 						<h3>Deskripsi</h3>

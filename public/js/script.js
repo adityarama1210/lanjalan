@@ -114,9 +114,9 @@
 	jQuery('#scrollToContent').click(function(e){
 		e.preventDefault();
 		if(window.location.pathname == "/") {
-			jQuery.scrollTo("#portfolio", 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
+			jQuery.scrollTo("#portfolio", 700, { offset:-(jQuery('#header .top').height()), axis:'y' });
 		} else if (window.location.pathname == "/search") {
-			jQuery.scrollTo("#search-result", 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
+			jQuery.scrollTo("#search-result", 700, { offset:-(jQuery('#header .top').height()), axis:'y' });
 		}
 	});
 
@@ -125,7 +125,7 @@
 		if (window.location.pathname == "/") {
 			e.preventDefault();
 			window.location.hash = "";
-			jQuery.scrollTo(href.substr(1), 400, { offset:-(jQuery('#header .top').height()), axis:'y' });
+			jQuery.scrollTo(href.substr(1), 500, { offset:-(jQuery('#header .top').height()), axis:'y' });
 		}
 	})
 
@@ -134,12 +134,8 @@
 	});
 
 	if(window.location.hash) {
-		setTimeout(function(){
-			jQuery.scrollTo(window.location.hash, 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
-		}, 500);
+		jQuery.scrollTo(window.location.hash, 500, { offset:-(jQuery('#header .top').height()), axis:'y' });
 	} else if(window.location.pathname == "/search") {
-		setTimeout(function(){
-			jQuery.scrollTo("#search-result", 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
-		}, 500);
+		jQuery.scrollTo("#search-result", 500, { offset:-(jQuery('#header .top').height()), axis:'y' });
 	}
 })();

@@ -54,10 +54,10 @@ class HomeController extends Controller
             foreach($arr_of_similarity as $package_id => $relevance_value){
                 array_push($arr, Package::find($package_id));
             }
-            return view('index', ['search' => true, 'data' => $arr, 'error' => false]);
+            return view('index', ['search' => true, 'data' => $arr, 'error' => false, 'randomimage' => ['http://placehold.it/300x300']]);
         }
         else{
-            return view('index', ['search' => true, 'data' => [], 'error' => true]);
+            return view('index', ['search' => true, 'data' => [], 'error' => true, 'randomimage' => []]);
         }
     	/*foreach($arr as $w => $freq){
 
@@ -71,7 +71,7 @@ class HomeController extends Controller
 
     public function package(Request $request, $id) {
         $package = Package::find($id);
-        $payload = ['data' => $package, 'randomimage' => 'http://placehold.it/300x300'];
+        $payload = ['data' => $package, 'randomimage' => ['http://placehold.it/300x300']];
         return view('package', $payload);
     }
 }
