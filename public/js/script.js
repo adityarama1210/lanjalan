@@ -115,7 +115,11 @@
 	//Set Down Arrow Button
 	jQuery('#scrollToContent').click(function(e){
 		e.preventDefault();
-		jQuery.scrollTo("#portfolio", 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
+		if(window.location.pathname == "/") {
+			jQuery.scrollTo("#portfolio", 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
+		} else if (window.location.pathname == "/search") {
+			jQuery.scrollTo("#search-result", 1000, { offset:-(jQuery('#header .top').height()), axis:'y' });
+		}
 	});
 
 	jQuery('nav > ul > li > a').click(function(e){
