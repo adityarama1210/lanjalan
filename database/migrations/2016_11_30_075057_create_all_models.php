@@ -18,6 +18,7 @@ class CreateAllModels extends Migration
             $table->increments('id');
             $table->string('name');
             $table->longText('description');
+            $table->string('link');
             $table->string('price');
         });
         Schema::create('words', function (Blueprint $table) {
@@ -30,8 +31,8 @@ class CreateAllModels extends Migration
             $table->integer('package_id')->unsigned();
             $table->integer('word_id')->unsigned();
             $table->float('weight', 7, 2);
-            $table->foreign('word_id')->references('id')->on('words')->onDelete('cascade');
-            $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
+            $table->foreign('word_id')->references('id')->on('words');
+            $table->foreign('package_id')->references('id')->on('packages');
             $table->primary(['package_id','word_id']);
         });
     }
