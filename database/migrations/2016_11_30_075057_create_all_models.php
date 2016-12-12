@@ -18,8 +18,8 @@ class CreateAllModels extends Migration
             $table->increments('id');
             $table->string('name');
             $table->longText('description');
-            $table->string('link');
             $table->string('price');
+            $table->string('link');
         });
         Schema::create('words', function (Blueprint $table) {
             $table->increments('id');
