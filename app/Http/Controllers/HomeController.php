@@ -7,6 +7,7 @@ use App\Package;
 use App\Word;
 use App\DocumentWord;
 use DB;
+use GuzzleHttp\Client;
 
 class HomeController extends Controller
 {
@@ -30,8 +31,14 @@ class HomeController extends Controller
         if(!$query){
             return redirect()->route('index');
         }
-        $arr1 = explode(" ", strtolower($query));
-        $arr = array_count_values($arr1);
+        $querySplit = explode(" ", strtolower($query));
+        $cleanQuery = [];
+        foreach ($querySplit as $token) {
+            if($token != "") {
+                array_push($cleanQuery, $token);
+            }
+        }
+        $arr = array_count_values($cleanQuery);
         $document_words = $this->get_document_words($arr);
         if(count($document_words) > 0) {
             $arr_of_similarity = [];
@@ -60,15 +67,15 @@ class HomeController extends Controller
                 foreach ($words as $w){
                     // Only add the word if it's not present in the query
                     $word = Word::find($w->word_id)->word;
-                    if(!in_array($word, $arr1) and !in_array($word, $arr_of_expansion_words)){
+                    if(!in_array($word, $cleanQuery) and !in_array($word, $arr_of_expansion_words)){
                         array_push($arr_of_expansion_words, $word);
                         break;
                     }
                 }
             }
-            $arr1 = array_merge($arr1, $arr_of_expansion_words);
+            $cleanQuery = array_merge($cleanQuery, $arr_of_expansion_words);
 
-            $arr = array_count_values($arr1);
+            $arr = array_count_values($cleanQuery);
             $document_words = $this->get_document_words($arr);
             $arr_of_similarity = [];
             $arr_of_similarity = $this->get_array_of_similarity($document_words, $arr_of_similarity, $arr);
@@ -99,6 +106,7 @@ class HomeController extends Controller
         return $arr;
         //return $min;
     }
+
     private function get_document_words($arr){
         $arr_of_query = [];
         $query_weight = 0.0;
@@ -111,6 +119,7 @@ class HomeController extends Controller
         $document_words = DB::table('document_words')->whereIn('word_id',$words_id)->orderBy('package_id')->get();
         return $document_words;
     }
+
     private function get_array_of_similarity($document_words, $arr_of_similarity, $arr){
         foreach($document_words as $document_word){
             $w = Word::find($document_word->word_id);
@@ -132,9 +141,179 @@ class HomeController extends Controller
         });
         return $arr_of_similarity;
     }
+
     public function package(Request $request, $id) {
-        $package = Package::find($id);
-        $payload = ['data' => $package, 'randomimage' => ['http://placehold.it/300x300']];
+        // ### GEOGRAPHIC IR
+        $error = false;
+        $recommendation = [];
+        // # GeoParsing
+        $thePackage = Package::find($id);
+        $token = explode(" ", strtolower($thePackage->name));
+        $path = app_path('Lokasi.json');
+        $file = \File::get($path);
+        $countries = json_decode($file)->countries;
+        $provinsi = json_decode($file)->provinsi;
+        $kabupaten = json_decode($file)->kabupaten;
+        $assocLokasi = [];
+        foreach($countries as $lokasi) {
+            $locName = strtolower($lokasi->name);
+            $locNameSplit = explode(" ", $locName);
+            if(count($locNameSplit) > 1) {
+                if(!isset($assocLokasi[$locNameSplit[0]])) {
+                    $assocLokasi[$locNameSplit[0]] = [];
+                }
+                $assocLokasi[$locNameSplit[0]][$locNameSplit[1]] = [];
+            } else {
+                if(!isset($assocLokasi[$locNameSplit[0]])) {
+                    $assocLokasi[$locNameSplit[0]] = [];
+                }
+            }
+        }
+        foreach($provinsi as $lokasi) {
+            $locName = strtolower($lokasi->name);
+            $locNameSplit = explode(" ", $locName);
+            if(count($locNameSplit) > 1) {
+                if(!isset($assocLokasi[$locNameSplit[0]])) {
+                    $assocLokasi[$locNameSplit[0]] = [];
+                }
+                $assocLokasi[$locNameSplit[0]][$locNameSplit[1]] = [];
+            } else {
+                if(!isset($assocLokasi[$locNameSplit[0]])) {
+                    $assocLokasi[$locNameSplit[0]] = [];
+                }
+            }
+        }
+        foreach($kabupaten as $lokasi) {
+            $locName = strtolower($lokasi->name);
+            $prefix = "kabupaten ";
+            if (substr($locName, 0, strlen($prefix)) == $prefix) {
+                $locName = substr($locName, strlen($prefix));
+            }
+            $prefix = "kota ";
+            if (substr($locName, 0, strlen($prefix)) == $prefix) {
+                $locName = substr($locName, strlen($prefix));
+            }
+            $locNameSplit = explode(" ", $locName);
+            if(count($locNameSplit) > 1) {
+                if(!isset($assocLokasi[$locNameSplit[0]])) {
+                    $assocLokasi[$locNameSplit[0]] = [];
+                }
+
+                $assocLokasi[$locNameSplit[0]][$locNameSplit[1]] = [];
+            } else {
+                if(!isset($assocLokasi[$locNameSplit[0]])) {
+                    $assocLokasi[$locNameSplit[0]] = [];
+                }
+            }
+        }
+
+        $centroid = "";
+        for ($i=0; $i < count($token); $i++) {
+            $word = $token[$i];
+            if($i+1 < count($token)) {
+                $nextWord = $token[$i+1];
+            }
+            if(isset($assocLokasi[$word])) {
+                $centroid .= $word;
+                if(count($assocLokasi[$word]) > 0) {
+                    if(isset($assocLokasi[$word][$nextWord])) {
+                        $centroid .= "+" . $nextWord;
+                    }
+                }
+            }
+        }
+
+        // # GeoCoding
+        if($centroid != "") {
+            $latlng = $this->getLatLong($centroid);
+            if(count($latlng) > 0) {
+                // # NearbyCities
+                $nearbyCities = $this->getNearbyCities($latlng, 100);
+                if(count($nearbyCities) > 0) {
+                    // SEARCH QUERY with 3 nearby cities in query, get 4 best result
+                    $query = "";
+                    $numberOfCityToQuery = 0;
+                    $numberOfRecommendation = 0;
+                    foreach ($nearbyCities as $city) {
+                        if($numberOfCityToQuery < 3) {
+                            $query .= $city;
+                            if($numberOfCityToQuery != 2) {
+                                $query .= " ";
+                            }
+                            $numberOfCityToQuery++;
+                        }
+                    }
+                    
+                    $searchResult = $this->search_by_string($query);
+                    if(count($searchResult) > 0) {
+                        foreach ($searchResult as $package) {
+                            if($numberOfRecommendation < 4) {
+                                if($package->id != $id) {
+                                    array_push($recommendation, $package);
+                                    $numberOfRecommendation++;
+                                }
+                            }
+                        }
+                        // echo("Location: ". $centroid);
+                        // echo("<br/>Query: ". $query);
+                        // echo("<br/>Recommendation: ");
+                        // dd($recommendation);
+                    } else {
+                        $error = "Package for recommendation not found";
+                    }
+                } else {
+                    $error = "Unable to get nearby cities";
+                }
+            } else {
+                $error = "Unable to get latitude and longitude";
+            }
+        } else {
+            $error = "Location not recognized";
+        }
+
+        $payload = ['package' => $thePackage,
+        'recommendation' => $recommendation,
+        'randomimage' => ['http://placehold.it/300x300'],
+        'error' => $error
+        ];
         return view('package', $payload);
+    }
+
+    private function getNearbyCities($latlng, $radius) {
+        $client = new Client(['timeout'  => 10.0]);
+        $uri = 'http://gd.geobytes.com/GetNearbyCities?callback=?&radius='.$radius.'&Latitude='.$latlng->lat.'&Longitude='.$latlng->lng;
+        $response = $client->request('GET', $uri);
+        if($response->getStatusCode() == 200) {
+            $body = substr($response->getBody()->getContents(), 2);
+            $body = substr($body, 0, strlen($body)-2);
+            $nearbyCities = json_decode($body);
+            $nearbyCityNames = [];
+            if(count($nearbyCities) > 0 && count($nearbyCities[0]) > 0) {
+                foreach($nearbyCities as $nearbyCity) {
+                    array_push($nearbyCityNames, $nearbyCity[1]);
+                }
+                return $nearbyCityNames;
+            } else {
+                return [];
+            }
+        } else {
+            return [];
+        }
+    }
+
+    private function getLatLong($city) {
+        $client = new Client(['timeout'  => 10.0]);
+        $uri = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$city.'&key=AIzaSyDQw1i5TYajVY1RDAFgUT0RgNaYxHX5FQw';
+        $response = $client->request('GET', $uri);
+        if($response->getStatusCode() == 200) {
+            $body = json_decode($response->getBody()->getContents());
+            if($body->status == "OK") {
+                $latlng = $body->results[0]->geometry->location;
+                return $latlng;
+            }
+        } else {
+            return [];
+
+        }
     }
 }
