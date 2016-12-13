@@ -65,7 +65,8 @@
 				@else
 				@foreach($data as $package)
 				<div class="col-sm-4 travel-package">
-					<a href="/package/{{ $package->id }}" class="recent-work imagelink" style="background-image:url({{ $randomimage[0] }})">
+					<?php $randomint = rand(1, 8) ?>
+					<a href="/package/{{ $package->id }}" class="recent-work imagelink" style="background-image:url({{ asset('images/randomimage/img'.$randomint.'.jpg') }})">
 						<span class="btn btn-o-white imagename">{{ $package->name }}</span>
 					</a>
 					<span class="price">Starts from Rp. {{ explode(' - ', $package->price)[0] }}</span>

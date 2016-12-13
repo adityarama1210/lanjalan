@@ -21,7 +21,8 @@
 				<br/>
 				<div class="row">
 					<div class="col col-sm-4 image">
-						<img src="{{ $randomimage[0] }}" alt="{{ $package->name }}"/>
+						<?php $randomint = rand(1, 8) ?>
+						<img src="{{ asset('images/randomimage/img'.$randomint.'.jpg') }}" alt="{{ $package->name }}"/>
 					</div>
 					<div class="col col-sm-8 description">
 						<h3>Deskripsi</h3>
@@ -59,7 +60,8 @@
 				@else
 				@foreach($recommendation as $package)
 				<div class="col-sm-3 travel-package">
-					<a href="/package/{{ $package->id }}" class="recent-work imagelink" style="background-image:url({{ $randomimage[0] }})">
+					<?php $randomint = rand(1, 8) ?>
+					<a href="/package/{{ $package->id }}" class="recent-work imagelink" style="background-image:url({{ asset('images/randomimage/img'.$randomint.'.jpg') }})">
 						<span class="btn btn-o-white imagename">{{ $package->name }}</span>
 					</a>
 					<span class="price">Starts from Rp. {{ explode(' - ', $package->price)[0] }}</span>
