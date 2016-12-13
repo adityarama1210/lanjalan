@@ -29,7 +29,10 @@
 						</div>
 						<input type="hidden" name="min" id="min" value=-1>
 						<input type="hidden" name="max" id="max" value=-1>
+
 						<div class="form-group">
+							<!--<span>Price Range</span>-->
+							<label>Price Range</label>
 							<div id="slider-range"></div>
 							<p id="amount"></p>
 						</div>
