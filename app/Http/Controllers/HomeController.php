@@ -220,6 +220,7 @@ class HomeController extends Controller
                         $centroid .= "+" . $nextWord;
                     }
                 }
+                break;
             }
         }
 
