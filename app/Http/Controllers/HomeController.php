@@ -10,28 +10,30 @@ use DB;
 
 class HomeController extends Controller
 {
-    public function index(){
+    public function index() {
     	return view('index', ['search' => false]);
     }
 
     public function search(Request $request) {
         $query = $request->input('query');
-        $arr = $this->search_by_string($query);
+        $min = $request->input('min');
+        $max = $request->input('max');
+        $arr = $this->search_by_string($query, $min, $max);
         if ($arr) {
             return view('index', ['search' => true, 'data' => $arr, 'error' => false, 'randomimage' => ['http://placehold.it/300x300']]);
         } else {
             return view('index', ['search' => true, 'data' => [], 'error' => true, 'randomimage' => []]);
-        }   
+        }
     }
 
-    public function search_by_string($query){
+    public function search_by_string($query, $min=-1, $max=-1){
         if(!$query){
             return redirect()->route('index');
         }
         $arr1 = explode(" ", strtolower($query));
         $arr = array_count_values($arr1);
         $document_words = $this->get_document_words($arr);
-        if(count($document_words) > 0){
+        if(count($document_words) > 0) {
             $arr_of_similarity = [];
             
             $arr_of_similarity = $this->get_array_of_similarity($document_words, $arr_of_similarity, $arr);
@@ -56,7 +58,7 @@ class HomeController extends Controller
                 // take 1 top weighted word for this document
                 $words = DocumentWord::where('package_id', $package_id)->orderBy('weight','desc')->get();
                 foreach ($words as $w){
-                    // Only add the word if it's not presence in the query
+                    // Only add the word if it's not present in the query
                     $word = Word::find($w->word_id)->word;
                     if(!in_array($word, $arr1) and !in_array($word, $arr_of_expansion_words)){
                         array_push($arr_of_expansion_words, $word);
@@ -74,15 +76,17 @@ class HomeController extends Controller
             //print_r($arr_of_similarity);
             $arr = [];
             foreach($arr_of_similarity as $package_id => $relevance_value){
-                //if ($request->input('min')) {
-                //    $package = Package::find($package_id);
-                //   $price_range = explode(' - ', $package->price);
-                //    if ($price_range[0] <= $request->input('min') && $price_range[1] <= $request->input('max')) {
-                //        array_push($arr, $package);
-                //    }
-                //} else {
+                if ($min > -1) {
+                    $package = Package::find($package_id);
+                    $price_range = str_replace(".", "", $package->price);
+                    $price_range = explode(' - ', $price_range);
+
+                    if (intval($price_range[0]) >= $min && intval($price_range[1]) <= $max) {
+                        array_push($arr, $package);
+                    }
+                } else {
                     array_push($arr, Package::find($package_id));
-                //}
+                }
             }
             //return view('index', ['search' => true, 'data' => $arr, 'error' => false, 'randomimage' => ['http://placehold.it/300x300']]);
             //return $arr;
@@ -93,6 +97,7 @@ class HomeController extends Controller
             //return $arr;
         }
         return $arr;
+        //return $min;
     }
     private function get_document_words($arr){
         $arr_of_query = [];

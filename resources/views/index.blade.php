@@ -14,7 +14,7 @@
 			</section>
 			<section class="center">
 				<div class="slogan">
-					UNFORGETTABLE TRAVELLING EXPERIENCE
+					UNFORGETTABLE TRAVELLING EXPERIENCES AWAIT
 				</div>
 				<div class="secondary-slogan">
 					Find the right travel package for YOU!
@@ -27,9 +27,11 @@
 						<div class="form-group">
 							<input type="text" name="query" id="query" class="form-control form-control-white" placeholder="Liburan ke Bali bulan Februari" required>
 						</div>
+						<input type="hidden" name="min" id="min" value=-1>
+						<input type="hidden" name="max" id="max" value=-1>
 						<div class="form-group">
 							<div id="slider-range"></div>
-							<p id="amount">0</p>
+							<p id="amount"></p>
 						</div>
 						<input type="submit" class="btn btn-o-white" value="Search">
 					</form>

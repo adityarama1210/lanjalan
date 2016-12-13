@@ -143,11 +143,15 @@
 		range: true,
 		min: 0,
 		max: 50000000,
-		values: [ 1000000, 20000000 ],
+		values: [ 0, 50000000 ],
 		slide: function( event, ui ) {
 			jQuery( "#amount" ).html( "Rp " + ui.values[ 0 ] + " - Rp " + ui.values[ 1 ] );
+			jQuery( "#min" ).val( ui.values[ 0 ] );
+			jQuery( "#max" ).val( ui.values[ 1 ] );
 		}
 	});
 	jQuery( "#amount" ).html( "Rp " + jQuery( "#slider-range" ).slider( "values", 0 ) +
 	" - Rp " + jQuery( "#slider-range" ).slider( "values", 1 ) );
+	jQuery( "#min" ).val( jQuery( "#slider-range" ).slider( "values", 0 ) );
+	jQuery( "#max" ).val( jQuery( "#slider-range" ).slider( "values", 1 ) );
 })();
