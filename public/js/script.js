@@ -138,4 +138,16 @@
 	} else if(window.location.pathname == "/search") {
 		jQuery.scrollTo("#search-result", 500, { offset:-(jQuery('#header .top').height()), axis:'y' });
 	}
+
+	jQuery( "#slider-range" ).slider({
+		range: true,
+		min: 0,
+		max: 50000000,
+		values: [ 1000000, 20000000 ],
+		slide: function( event, ui ) {
+			jQuery( "#amount" ).html( "Rp " + ui.values[ 0 ] + " - Rp " + ui.values[ 1 ] );
+		}
+	});
+	jQuery( "#amount" ).html( "Rp " + jQuery( "#slider-range" ).slider( "values", 0 ) +
+	" - Rp " + jQuery( "#slider-range" ).slider( "values", 1 ) );
 })();

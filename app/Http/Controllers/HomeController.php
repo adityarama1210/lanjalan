@@ -14,8 +14,17 @@ class HomeController extends Controller
     	return view('index', ['search' => false]);
     }
 
-    public function search(Request $request){
-    	$query = $request->input('query');
+    public function search(Request $request) {
+        $query = $request->input('query');
+        $arr = $this->search_by_string($query);
+        if ($arr) {
+            return view('index', ['search' => true, 'data' => $arr, 'error' => false, 'randomimage' => ['http://placehold.it/300x300']]);
+        } else {
+            return view('index', ['search' => true, 'data' => [], 'error' => true, 'randomimage' => []]);
+        }   
+    }
+
+    public function search_by_string($query){
         if(!$query){
             return redirect()->route('index');
         }
@@ -65,14 +74,25 @@ class HomeController extends Controller
             //print_r($arr_of_similarity);
             $arr = [];
             foreach($arr_of_similarity as $package_id => $relevance_value){
-                array_push($arr, Package::find($package_id));
+                //if ($request->input('min')) {
+                //    $package = Package::find($package_id);
+                //   $price_range = explode(' - ', $package->price);
+                //    if ($price_range[0] <= $request->input('min') && $price_range[1] <= $request->input('max')) {
+                //        array_push($arr, $package);
+                //    }
+                //} else {
+                    array_push($arr, Package::find($package_id));
+                //}
             }
-            return view('index', ['search' => true, 'data' => $arr, 'error' => false, 'randomimage' => ['http://placehold.it/300x300']]);
+            //return view('index', ['search' => true, 'data' => $arr, 'error' => false, 'randomimage' => ['http://placehold.it/300x300']]);
+            //return $arr;
         }
         else{
-            return view('index', ['search' => true, 'data' => [], 'error' => true, 'randomimage' => []]);
+            //return view('index', ['search' => true, 'data' => [], 'error' => true, 'randomimage' => []]);
+            $arr = [];
+            //return $arr;
         }
-    	
+        return $arr;
     }
     private function get_document_words($arr){
         $arr_of_query = [];

@@ -27,6 +27,10 @@
 						<div class="form-group">
 							<input type="text" name="query" id="query" class="form-control form-control-white" placeholder="Liburan ke Bali bulan Februari" required>
 						</div>
+						<div class="form-group">
+							<div id="slider-range"></div>
+							<p id="amount">0</p>
+						</div>
 						<input type="submit" class="btn btn-o-white" value="Search">
 					</form>
 				</div>

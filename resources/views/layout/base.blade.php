@@ -16,6 +16,9 @@
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nixie+One:regular,italic,bold,bolditalic"/>
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Alegreya+SC:regular,italic,bold,bolditalic"/>
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/jquery-ui.structure.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/jquery-ui.theme.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/style.css') }}" media="screen"/>
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -84,6 +87,7 @@
 	</div>
 </div>
 <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+<script src="{{ asset('js/jqueryui/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('js/jquery-migrate-1.2.1.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/jquery.actual.min.js') }}"></script>
