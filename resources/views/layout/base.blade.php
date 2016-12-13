@@ -50,12 +50,6 @@
 					<a href="/#services"><i class="fa fa-tasks"></i> Services</a>
 				</li>
 				<li>
-					<a href="/#blog"><i class="fa fa-wordpress"></i> Blog</a>
-				</li>
-				<li>
-					<a href="/#parallax"><i class="fa fa-heart"></i> Parallax</a>
-				</li>
-				<li>
 					<a href="/#testimonials"><i class="fa fa-thumbs-up"></i> Testimonials</a>
 				</li>
 				<li>

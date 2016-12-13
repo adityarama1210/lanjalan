@@ -25,12 +25,12 @@
 						<h4>{{ session('error') }}</h4>
 						@endif
 						<div class="form-group">
-							<input type="text" name="query" id="query" class="form-control form-control-white" placeholder="Liburan ke Bali bulan Februari" required>
+							<input type="text" name="query" id="query" class="form-control form-control-white" placeholder="Search" required>
 						</div>
 						<input type="hidden" name="min" id="min" value=-1>
 						<input type="hidden" name="max" id="max" value=-1>
 
-						<div class="form-group">
+						<div id="price-slider" class="form-group">
 							<!--<span>Price Range</span>-->
 							<label>Price Range</label>
 							<div id="slider-range"></div>

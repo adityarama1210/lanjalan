@@ -51,7 +51,7 @@
 				@if($error)
 				<div class="col-sm-12">
 					<p>
-						Recommendation Error:
+						No recommendation for this package.
 						<br/>
 						{{ $error }}
 					</p>

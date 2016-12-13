@@ -259,13 +259,13 @@ class HomeController extends Controller
                         // echo("<br/>Recommendation: ");
                         // dd($recommendation);
                     } else {
-                        $error = "Package for recommendation not found";
+                        $error = "Package for recommendation not found:" . $centroid;
                     }
                 } else {
-                    $error = "Unable to get nearby cities";
+                    $error = "Unable to get nearby cities:" . $centroid;
                 }
             } else {
-                $error = "Unable to get latitude and longitude";
+                $error = "Unable to get latitude and longitude: " . $centroid;
             }
         } else {
             $error = "Location not recognized";
