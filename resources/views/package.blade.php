@@ -53,9 +53,9 @@
 				</div>
 				@else
 				@foreach($recommendation as $package)
-				<div class="col-sm-4 travel-package">
+				<div class="col-sm-3 travel-package">
 					<a href="/package/{{ $package->id }}" class="recent-work imagelink" style="background-image:url({{ $randomimage[0] }})">
-						<span class="btn btn-o-white imagename">PESAN</span>
+						<span class="btn btn-o-white imagename">{{ $package->name }}</span>
 					</a>
 					<span class="price">Starts from Rp. {{ explode(' - ', $package->price)[0] }}</span>
 				</div>
