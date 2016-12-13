@@ -49,14 +49,13 @@ class HomeController extends Controller
                 foreach ($words as $w){
                     // Only add the word if it's not presence in the query
                     $word = Word::find($w->word_id)->word;
-                    if(!in_array($word, $arr1)){
+                    if(!in_array($word, $arr1) and !in_array($word, $arr_of_expansion_words)){
                         array_push($arr_of_expansion_words, $word);
                         break;
                     }
                 }
             }
             $arr1 = array_merge($arr1, $arr_of_expansion_words);
-             
 
             $arr = array_count_values($arr1);
             $document_words = $this->get_document_words($arr);
