@@ -118,7 +118,7 @@ class HomeController extends Controller
                 }
             }
             $cleanQuery = array_merge($cleanQuery, $arr_of_expansion_words);
-
+            
             $arr = array_count_values($cleanQuery);
             $document_words = $this->get_document_words($arr);
             $arr_of_similarity = [];
@@ -178,12 +178,7 @@ class HomeController extends Controller
             }
             $arr_of_similarity[$document_word->package_id] = $result;
         }
-        uasort($arr_of_similarity, function($a, $b){
-            if($a == $b)
-                return 1;
-            else
-                return $b - $a;
-        });
+        arsort($arr_of_similarity);
         return $arr_of_similarity;
     }
 
