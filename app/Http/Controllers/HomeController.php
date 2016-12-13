@@ -19,8 +19,8 @@ class HomeController extends Controller
         if(!$query){
             return redirect()->route('index');
         }
-        $arr = explode(" ", strtolower($query));
-        $arr = array_count_values($arr);
+        $arr1 = explode(" ", strtolower($query));
+        $arr = array_count_values($arr1);
         /*$arr_of_query = [];
         $query_weight = 0.0;
         $arr_of_word = array_keys($arr);
@@ -52,6 +52,47 @@ class HomeController extends Controller
                     return $b - $a;
             });*/
             $arr_of_similarity = $this->get_array_of_similarity($document_words, $arr_of_similarity, $arr);
+            
+            // Query Expansion
+            $temp = array_keys($arr_of_similarity);
+            $exp_pack = $temp[0];
+            // ambil dari docword yang packageidnya sama
+            $exp_docwords = DB::table('document_words')->where('package_id', $exp_pack)->get();
+            // iterasi
+            //      ambil word_id yang weightnya paling gede dan ga ada di query
+            //print_r($arr1);
+            $arr1_id = DB::table('words')->whereIn('word', $arr1)->pluck('id');
+            //$arr1_id = (array) $arr1_id;
+            //print_r($arr1_id);
+            $arr2_id = [];
+            for($i=0; $i<count($arr1_id); $i++) {
+                $arr2_id[$i] = $arr1_id[$i];
+            }
+            $max = 0;
+            $exp_word_id = 0;
+            //print_r($arr2_id);
+            for($i=0; $i<count($exp_docwords); $i++) {
+                //print_r($exp_docwords[$i]->word_id." ");
+                if($exp_docwords[$i]->weight > $max && !in_array($exp_docwords[$i]->word_id, $arr2_id)) {
+                    $max = $exp_docwords[$i]->weight;
+                    $exp_word_id = $exp_docwords[$i]->word_id;
+                    //print_r($exp_word_id." ".$max."\n");
+                }
+            }
+            
+            // masukin word_id itu ke $arr (query)      
+            $exp_word = DB::table('words')->where('id', $exp_word_id)->pluck('word');
+            //print_r($exp_word);
+            array_push($arr1, $exp_word[0]);
+            //print_r($arr1);
+            // $document_words = $this->get_document_words($arr);    
+
+            $arr = array_count_values($arr1);
+            $document_words = $this->get_document_words($arr);
+            $arr_of_similarity = [];
+            $arr_of_similarity = $this->get_array_of_similarity($document_words, $arr_of_similarity, $arr);
+
+            //print_r($arr_of_similarity);
             $arr = [];
             foreach($arr_of_similarity as $package_id => $relevance_value){
                 array_push($arr, Package::find($package_id));
