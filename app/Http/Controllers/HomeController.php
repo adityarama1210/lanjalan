@@ -38,6 +38,50 @@ class HomeController extends Controller
                 array_push($cleanQuery, $token);
             }
         }
+
+                $matches = [];
+        $duration_flag = false;
+        $duration = 0;
+        for ($i = (count($cleanQuery) - 1); $i >= 0; $i--) {
+            if ($duration_flag) {
+                if (preg_match("/(1|2|3|4|5|6|7|8|9|10|11)/", $cleanQuery[$i], $matches)) {
+                    $duration = intval($matches[0]);
+                } else if (preg_match("/satu/", $cleanQuery[$i])) {
+                    $duration = 1;
+                } else if (preg_match("/dua/", $cleanQuery[$i])) {
+                    $duration = 2;
+                } else if (preg_match("/tiga/", $cleanQuery[$i])) {
+                    $duration = 3;
+                } else if (preg_match("/empat/", $cleanQuery[$i])) {
+                    $duration = 4;
+                } else if (preg_match("/lima/", $cleanQuery[$i])) {
+                    $duration = 5;
+                } else if (preg_match("/enam/", $cleanQuery[$i])) {
+                    $duration = 6;
+                } else if (preg_match("/tujuh/", $cleanQuery[$i])) {
+                    $duration = 7;
+                } else if (preg_match("/delapan/", $cleanQuery[$i])) {
+                    $duration = 8;
+                } else if (preg_match("/sembilan/", $cleanQuery[$i])) {
+                    $duration = 9;
+                } else if (preg_match("/sepuluh/", $cleanQuery[$i])) {
+                    $duration = 10;
+                } else if (preg_match("/sebelas/", $cleanQuery[$i])) {
+                    $duration = 11;
+                }
+
+                if ($duration_flag === "hari" || $duration_flag === "day") {
+                    $cleanQuery[$i] = $duration . "d" . ($duration - 1) . "n";
+                } else {
+                    $cleanQuery[$i] = ($duration + 1) . "d" . $duration . "n";
+                }
+
+                $duration_flag = 0;
+            } else if (preg_match("((hari|day)|(malam|night))", $cleanQuery[$i], $matches)) {
+                $duration_flag = $matches[0];
+            }
+        }
+
         $arr = array_count_values($cleanQuery);
         $document_words = $this->get_document_words($arr);
         if(count($document_words) > 0) {
@@ -85,7 +129,8 @@ class HomeController extends Controller
             foreach($arr_of_similarity as $package_id => $relevance_value){
                 if ($min > -1) {
                     $package = Package::find($package_id);
-                    $price_range = str_replace(".", "", $package->price);
+                    $symbols = array('.', ',');
+                    $price_range = str_replace($symbols, "", $package->price);
                     $price_range = explode(' - ', $price_range);
 
                     if (intval($price_range[0]) >= $min && intval($price_range[1]) <= $max) {
