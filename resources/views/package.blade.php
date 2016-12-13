@@ -25,7 +25,12 @@
 					</div>
 					<div class="col col-sm-8 description">
 						<h3>Deskripsi</h3>
-						<p>{{ $package->description }}</p>
+						<?php 
+						$pattern = '/\\n/i';
+						$replacement = '<br><br>';
+						$desc = preg_replace($pattern, $replacement, $package->description);
+						?>
+						<p>{!! $desc !!}</p>
 						<h3>Biaya</h3>
 						<p>{{ $package->price }}</p>
 						<a href="{{ $package->link }}" class="btn btn-o-white btn-lg">BELI</a>
